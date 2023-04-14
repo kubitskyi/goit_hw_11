@@ -1,5 +1,6 @@
 from collections import UserDict
 from datetime import date
+import re
 
 
 class Field:
@@ -18,8 +19,22 @@ class UserName(Field):
     pass
 
 class PhoneNumber(Field):
-    pass
+    def __init__(self, number):
+       self.__number = None
+       self.value = number 
+    
+    @property
+    def value(self):
+        return self.__number
+    
+    @value.setter
+    def value(self, val):
+        pattern = re.compile(r"(380)?(\s*)?\d{3}(\s*)?\d{3}(\s*)?\d{3}")
 
+        if not pattern.match(val):
+            raise ValueError('Invalid number')
+        self.__number = val
+        
 class Birthday():
     def __init__(self, day):
         self.data = None
@@ -89,7 +104,7 @@ class ContactsBook(UserDict):
 
 if __name__=="__main__":
     name = UserName('Jon')
-    phone = PhoneNumber('0974736584')
+    phone = PhoneNumber('380974736548')
     bh = Birthday(date(1995,4,5))
     record = Record(name, phone, bh)
 
